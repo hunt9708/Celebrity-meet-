@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Who Do You Want to Meet?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <header>
+    <div class="container">
+      <h1>Who Do You Want to Meet?</h1>
+      <p class="subtitle">Pick a celebrity. We'll record your choice.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search celebrities..." autocomplete="off" />
+    </div>
+
+    <div id="celebrity-grid" class="grid">
+      <!-- Cards will be injected here -->
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="close-btn" id="close-modal">&times;</button>
+      <div class="modal-header">
+        <img id="modal-photo" class="modal-photo" alt="" style="display:none" />
+        <div class="modal-emoji" id="modal-emoji"></div>
+        <h2 id="modal-name"></h2>
+        <p class="modal-category" id="modal-category"></p>
+      </div>
+      <form id="submit-form">
+        <div class="form-group">
+          <label for="user-name">Your name (optional)</label>
+          <input type="text" id="user-name" placeholder="Anonymous" maxlength="80" />
+        </div>
+        <div class="form-group">
+          <label for="user-message">Short message (optional)</label>
+          <textarea id="user-message" placeholder="Why do you want to meet them?" rows="3" maxlength="500"></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submit-btn">
+          I want to meet them
+        </button>
+      </form>
+      <div id="success-message" class="success hidden">
+        <div class="success-icon">✓</div>
+        <h3>Got it!</h3>
+        <p>Your choice has been recorded.</p>
+        <button class="submit-btn secondary" id="close-success">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Made for collecting celebrity meeting requests</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

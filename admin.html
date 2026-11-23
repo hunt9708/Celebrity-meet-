@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – Celebrity Meet Requests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a22;
+      --border: #2e2e3a;
+      --text: #f0f0f5;
+      --text-muted: #9a9aab;
+      --accent: #7c5cff;
+      --success: #22c55e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 1.8rem; margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); margin-bottom: 32px; }
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 380px;
+      margin: 80px auto;
+    }
+    .login-box h2 { margin-bottom: 20px; font-size: 1.3rem; }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    input:focus { border-color: var(--accent); }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { opacity: 0.9; }
+    .error { color: #f87171; font-size: 0.9rem; margin-top: 12px; display: none; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+    .section-title { font-size: 1.1rem; margin-bottom: 16px; font-weight: 600; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: #22222c;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    tr:last-child td { border-bottom: none; }
+    .name { font-weight: 500; }
+    .message { color: var(--text-muted); font-size: 0.9rem; max-width: 280px; }
+    .time { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+    .empty { text-align: center; padding: 40px; color: var(--text-muted); }
+    .top-list { margin-bottom: 40px; }
+    .top-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .count-badge {
+      background: rgba(124, 92, 255, 0.2);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .logout {
+      display: inline-block;
+      margin-top: 24px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: auto;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login -->
+    <div id="login-view">
+      <div class="login-box">
+        <h2>Admin Login</h2>
+        <input type="password" id="password" placeholder="Enter admin password" />
+        <button id="login-btn">Enter</button>
+        <p class="error" id="login-error">Wrong password</p>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+      <h1>Celebrity Meet Requests</h1>
+      <p class="subtitle">All choices people have submitted</p>
+
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="total-count">0</div>
+          <div class="stat-label">Total requests</div>
+        </div>
+      </div>
+
+      <div class="top-list">
+        <div class="section-title">Most requested</div>
+        <div id="top-celebrities"></div>
+      </div>
+
+      <div class="section-title">All submissions</div>
+      <div id="submissions-table"></div>
+
+      <button class="logout" id="logout-btn">Log out</button>
+    </div>
+  </div>
+
+  <script>
+    const loginView = document.getElementById('login-view');
+    const dashboard = document.getElementById('dashboard');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('login-btn');
+    const loginError = document.getElementById('login-error');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    let currentPassword = '';
+
+    // Check if already logged in (sessionStorage)
+    if (sessionStorage.getItem('adminPass')) {
+      currentPassword = sessionStorage.getItem('adminPass');
+      showDashboard();
+    }
+
+    loginBtn.addEventListener('click', tryLogin);
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') tryLogin();
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('adminPass');
+      currentPassword = '';
+      loginView.classList.remove('hidden');
+      dashboard.classList.add('hidden');
+      passwordInput.value = '';
+    });
+
+    async function tryLogin() {
+      const pass = passwordInput.value.trim();
+      if (!pass) return;
+
+      try {
+        const res = await fetch('/api/admin/submissions?password=' + encodeURIComponent(pass));
+        if (res.status === 401) {
+          loginError.style.display = 'block';
+          return;
+        }
+        currentPassword = pass;
+        sessionStorage.setItem('adminPass', pass);
+        showDashboard();
+      } catch (e) {
+        loginError.textContent = 'Server error';
+        loginError.style.display = 'block';
+      }
+    }
+
+    async function showDashboard() {
+      loginView.classList.add('hidden');
+      dashboard.classList.remove('hidden');
+      await loadData();
+    }
+
+    async function loadData() {
+      try {
+        const [subsRes, statsRes] = await Promise.all([
+          fetch('/api/admin/submissions?password=' + encodeURIComponent(currentPassword)),
+          fetch('/api/admin/stats?password=' + encodeURIComponent(currentPassword))
+        ]);
+
+        const submissions = await subsRes.json();
+        const stats = await statsRes.json();
+
+        document.getElementById('total-count').textContent = stats.total;
+
+        // Top celebrities
+        const topEl = document.getElementById('top-celebrities');
+        if (stats.byCelebrity.length === 0) {
+          topEl.innerHTML = '<div class="empty">No data yet</div>';
+        } else {
+          topEl.innerHTML = stats.byCelebrity.slice(0, 8).map(c => `
+            <div class="top-item">
+              <span>${c.name}</span>
+              <span class="count-badge">${c.count}</span>
+            </div>
+          `).join('');
+        }
+
+        // Table
+        const tableEl = document.getElementById('submissions-table');
+        if (submissions.length === 0) {
+          tableEl.innerHTML = '<div class="empty">No submissions yet. Share the public page!</div>';
+        } else {
+          tableEl.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Celebrity</th>
+                  <th>From</th>
+                  <th>Message</th>
+                  <th>When</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${submissions.map(s => `
+                  <tr>
+                    <td class="name">${escapeHtml(s.celebrityName)}</td>
+                    <td>${escapeHtml(s.name)}</td>
+                    <td class="message">${escapeHtml(s.message) || '—'}</td>
+                    <td class="time">${formatDate(s.createdAt)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function formatDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleString(undefined, {
+        month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
